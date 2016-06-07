@@ -1,0 +1,261 @@
+#%RAML 0.8
+title: Blog API
+version: "1.0.0"
+baseUri: "http://rita.anasit.com:80/api"
+schemas: 
+    - 
+        Blog: '{"type":"object","$schema":"http://json-schema.org/draft-03/schema#","title":"Blog","properties":{"category":{"type":"object","$ref":"#/schemas/Category","required":false,"title":"category"},"content":{"type":"string","required":false,"title":"content"},"id":{"type":"integer","required":true,"title":"id"},"name":{"type":"string","required":true,"title":"name"},"photoUrls":{"type":"array","required":false,"title":"photoUrls","items":{"type":"string","title":"photoUrls"},"uniqueItems":false},"status":{"type":"string","required":false,"title":"status"},"tags":{"type":"array","required":false,"title":"tags","items":{"type":"object","$ref":"#/schemas/Tag"},"uniqueItems":false}}}'
+    - 
+        Category: '{"type":"object","$schema":"http://json-schema.org/draft-03/schema#","title":"Category","properties":{"id":{"type":"integer","required":false,"title":"id"},"name":{"type":"string","required":false,"title":"name"}}}'
+    - 
+        Order: '{"type":"object","$schema":"http://json-schema.org/draft-03/schema#","title":"Order","properties":{"blogid":{"type":"integer","required":false,"title":"blogid"},"id":{"type":"integer","required":false,"title":"id"},"quantity":{"type":"integer","required":false,"title":"quantity"},"shipDate":{"type":"string","required":false,"title":"shipDate"},"status":{"type":"string","required":false,"title":"status"}}}'
+    - 
+        Tag: '{"type":"object","$schema":"http://json-schema.org/draft-03/schema#","title":"Tag","properties":{"id":{"type":"integer","required":false,"title":"id"},"name":{"type":"string","required":false,"title":"name"}}}'
+    - 
+        User: '{"type":"object","$schema":"http://json-schema.org/draft-03/schema#","title":"User","properties":{"email":{"type":"string","required":false,"title":"email"},"firstName":{"type":"string","required":false,"title":"firstName"},"id":{"type":"integer","required":false,"title":"id"},"lastName":{"type":"string","required":false,"title":"lastName"},"password":{"type":"string","required":false,"title":"password"},"phone":{"type":"string","required":false,"title":"phone"},"userStatus":{"type":"integer","required":false,"title":"userStatus"},"userlogin":{"type":"string","required":false,"title":"userlogin"}}}'
+/blog: 
+    displayName: Blog
+    get: 
+        displayName: get blog list
+        responses: 
+            "200": 
+                description: "已返回所有博客列表"
+                body: 
+                    application/json: 
+                        schema: Blog
+                        example: '[{"category":null,"content":"sample content","id":1,"name":"sample name","photoUrls":["sample photoUrls"],"status":"sample status","tags":[]}]'
+    post: 
+        displayName: Add a new blog to the store
+        body: 
+            application/json: 
+                schema: Blog
+                example: '{"category":null,"content":"sample content","id":1,"name":"sample name","photoUrls":["sample photoUrls"],"status":"sample status","tags":[]}'
+        responses: 
+            "200": 
+                description: Success
+            "405": 
+                description: Error 405
+    put: 
+        displayName: Update an existing blog
+        body: 
+            application/json: 
+                schema: Blog
+                example: '{"category":null,"content":"sample content","id":1,"name":"sample name","photoUrls":["sample photoUrls"],"status":"sample status","tags":[]}'
+        responses: 
+            "200": 
+                description: Success
+            "400": 
+                description: Error 400
+            "404": 
+                description: Error 404
+            "405": 
+                description: Error 405
+/blog/findByStatus: 
+    displayName: BlogFindByStatus
+    get: 
+        description: Multiple status values can be provided with comma separated strings
+        displayName: Multiple status values can be provided with comma separated strings
+        queryParameters: 
+            status: 
+                displayName: status
+                description: Status values that need to be considered for filter
+                type: string
+                required: true
+                repeat: true
+                enum: [available, pending, sold]
+        responses: 
+            "200": 
+                description: Success
+                body: 
+                    application/json: 
+                        schema: Blog
+                        example: '[{"category":null,"content":"sample content","id":1,"name":"sample name","photoUrls":["sample photoUrls"],"status":"sample status","tags":[]}]'
+            "400": 
+                description: Error 400
+/blog/findByTags: 
+    displayName: BlogFindByTags
+    get: 
+        description: Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
+        displayName: Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
+        queryParameters: 
+            tags: 
+                displayName: tags
+                description: Tags to filter by
+                type: string
+                required: true
+                repeat: true
+        responses: 
+            "200": 
+                description: Success
+                body: 
+                    application/json: 
+                        schema: Blog
+                        example: '[{"category":null,"content":"sample content","id":1,"name":"sample name","photoUrls":["sample photoUrls"],"status":"sample status","tags":[]}]'
+            "400": 
+                description: Error 400
+/blog/{blogid}: 
+    displayName: BlogBlogid
+    get: 
+        description: Returns a single blog
+        displayName: Returns a single blog
+        responses: 
+            "200": 
+                description: Success
+                body: 
+                    application/json: 
+                        schema: Blog
+                        example: '{"category":null,"content":"sample content","id":1,"name":"sample name","photoUrls":["sample photoUrls"],"status":"sample status","tags":[]}'
+            "400": 
+                description: Error 400
+            "404": 
+                description: Error 404
+    post: 
+        displayName: Updates a blog in the store with form data
+        responses: 
+            "200": 
+                description: Success
+            "405": 
+                description: Error 405
+    delete: 
+        displayName: Deletes a blog
+        responses: 
+            "200": 
+                description: Success
+            "400": 
+                description: Error 400
+/store/order: 
+    displayName: StoreOrder
+    post: 
+        displayName: Place an order for a blog
+        body: 
+            application/json: 
+                schema: Order
+                example: '{"blogid":1,"id":1,"quantity":1,"shipDate":"sample shipDate","status":"sample status"}'
+        responses: 
+            "200": 
+                description: Success
+            "400": 
+                description: Error 400
+/store/order/{orderId}: 
+    displayName: StoreOrderOrderId
+    uriParameters: 
+        orderId: 
+            displayName: orderId
+            description: ID of the order that needs to be deleted
+            type: string
+            required: false
+            repeat: false
+    get: 
+        description: For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions
+        displayName: For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions
+        responses: 
+            "200": 
+                description: Success
+                body: 
+                    application/json: 
+                        schema: Order
+                        example: '{"blogid":1,"id":1,"quantity":1,"shipDate":"sample shipDate","status":"sample status"}'
+            "400": 
+                description: Error 400
+            "404": 
+                description: Error 404
+    delete: 
+        description: For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors
+        displayName: For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors
+        responses: 
+            "200": 
+                description: Success
+            "400": 
+                description: Error 400
+            "404": 
+                description: Error 404
+/user: 
+    displayName: User
+    get: 
+        description: "获取博主列表"
+        displayName: "获取博主列表"
+        responses: 
+            "200": 
+                description: "获取博主列表"
+                body: 
+                    application/json: 
+                        schema: User
+                        example: '[{"email":"sample email","firstName":"sample firstName","id":1,"lastName":"sample lastName","password":"sample password","phone":"sample phone","userStatus":1,"userlogin":"sample userlogin"}]'
+    post: 
+        description: This can only be done by the logged in user.
+        displayName: This can only be done by the logged in user.
+        body: 
+            application/json: 
+                schema: User
+                example: '{"email":"sample email","firstName":"sample firstName","id":1,"lastName":"sample lastName","password":"sample password","phone":"sample phone","userStatus":1,"userlogin":"sample userlogin"}'
+        responses: 
+            "200": 
+                description: Success
+/user/createWithArray: 
+    displayName: UserCreateWithArray
+    post: 
+        displayName: Creates list of users with given input array
+        body: 
+            application/json: 
+                schema: User
+                example: '[{"email":"sample email","firstName":"sample firstName","id":1,"lastName":"sample lastName","password":"sample password","phone":"sample phone","userStatus":1,"userlogin":"sample userlogin"}]'
+        responses: 
+            "200": 
+                description: Success
+/user/createWithList: 
+    displayName: UserCreateWithList
+    post: 
+        displayName: Creates list of users with given list input
+        body: 
+            application/json: 
+                schema: User
+                example: '[{"email":"sample email","firstName":"sample firstName","id":1,"lastName":"sample lastName","password":"sample password","phone":"sample phone","userStatus":1,"userlogin":"sample userlogin"}]'
+        responses: 
+            "200": 
+                description: Success
+/user/{userlogin}: 
+    displayName: UserUserlogin
+    uriParameters: 
+        userlogin: 
+            displayName: userlogin
+            description: name that need to be deleted
+            type: string
+            required: false
+            repeat: false
+    get: 
+        displayName: Get user by user name
+        responses: 
+            "200": 
+                description: Success
+                body: 
+                    application/json: 
+                        schema: User
+                        example: '{"email":"sample email","firstName":"sample firstName","id":1,"lastName":"sample lastName","password":"sample password","phone":"sample phone","userStatus":1,"userlogin":"sample userlogin"}'
+            "400": 
+                description: Error 400
+            "404": 
+                description: Error 404
+    put: 
+        description: This can only be done by the logged in user.
+        displayName: This can only be done by the logged in user.
+        body: 
+            application/json: 
+                schema: User
+                example: '{"email":"sample email","firstName":"sample firstName","id":1,"lastName":"sample lastName","password":"sample password","phone":"sample phone","userStatus":1,"userlogin":"sample userlogin"}'
+        responses: 
+            "200": 
+                description: Success
+            "400": 
+                description: Error 400
+            "404": 
+                description: Error 404
+    delete: 
+        description: This can only be done by the logged in user.
+        displayName: This can only be done by the logged in user.
+        responses: 
+            "200": 
+                description: Success
+            "400": 
+                description: Error 400
+            "404": 
+                description: Error 404

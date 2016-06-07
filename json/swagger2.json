@@ -1,0 +1,618 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "袁淼的blog项目",
+    "version" : "1.0.0",
+    "title" : "Blog API",
+    "contact" : {
+      "name" : "API Team",
+      "url" : "http://wordnik.com",
+      "email" : "apiteam@wordnik.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "rita.anasit.com:80",
+  "basePath" : "/api",
+  "tags" : [ {
+    "name" : "Default",
+    "description" : "Default section"
+  }, {
+    "name" : "Blog",
+    "description" : "Operations about Blogs"
+  }, {
+    "name" : "Store",
+    "description" : "Operations about store"
+  }, {
+    "name" : "User",
+    "description" : "Operations about user"
+  } ],
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/blog" : {
+      "get" : {
+        "tags" : [ "Blog" ],
+        "summary" : "get blog list",
+        "operationId" : "getBlog",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "已返回所有博客列表",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Blog"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Blog" ],
+        "summary" : "Add a new blog to the store",
+        "operationId" : "addBlog",
+        "consumes" : [ "application/json" ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Blog"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "405" : {
+            "description" : "Error 405"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Blog" ],
+        "summary" : "Update an existing blog",
+        "operationId" : "updateBlog",
+        "consumes" : [ "application/json" ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Blog"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Error 400"
+          },
+          "404" : {
+            "description" : "Error 404"
+          },
+          "405" : {
+            "description" : "Error 405"
+          }
+        }
+      }
+    },
+    "/blog/findByStatus" : {
+      "get" : {
+        "tags" : [ "Blog" ],
+        "summary" : "Finds Blogs by status",
+        "description" : "Multiple status values can be provided with comma separated strings",
+        "operationId" : "findBlogsByStatus",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Status values that need to be considered for filter",
+          "required" : true,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi",
+          "enum" : [ "available", "pending", "sold" ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Blog"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error 400"
+          }
+        }
+      }
+    },
+    "/blog/findByTags" : {
+      "get" : {
+        "tags" : [ "Blog" ],
+        "summary" : "Finds Blogs by tags",
+        "description" : "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+        "operationId" : "findBlogsByTags",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "tags",
+          "in" : "query",
+          "description" : "Tags to filter by",
+          "required" : true,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Blog"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error 400"
+          }
+        }
+      }
+    },
+    "/blog/{blogid}" : {
+      "get" : {
+        "tags" : [ "Blog" ],
+        "summary" : "Find blog by ID",
+        "description" : "Returns a single blog",
+        "operationId" : "getBlogById",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/Blog"
+            }
+          },
+          "400" : {
+            "description" : "Error 400"
+          },
+          "404" : {
+            "description" : "Error 404"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Blog" ],
+        "summary" : "Updates a blog in the store with form data",
+        "operationId" : "updateBlogWithForm",
+        "consumes" : [ ],
+        "produces" : [ ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "405" : {
+            "description" : "Error 405"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Blog" ],
+        "summary" : "Deletes a blog",
+        "operationId" : "deleteBlog",
+        "consumes" : [ ],
+        "produces" : [ ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Error 400"
+          }
+        }
+      }
+    },
+    "/store/order" : {
+      "post" : {
+        "tags" : [ "Store" ],
+        "summary" : "Place an order for a blog",
+        "operationId" : "placeOrder",
+        "consumes" : [ "application/json" ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/Order"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Error 400"
+          }
+        }
+      }
+    },
+    "/store/order/{orderId}" : {
+      "get" : {
+        "tags" : [ "Store" ],
+        "summary" : "Find purchase order by ID",
+        "description" : "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
+        "operationId" : "getOrderById",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "orderId",
+          "in" : "path",
+          "description" : "ID of the order that needs to be deleted",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/Order"
+            }
+          },
+          "400" : {
+            "description" : "Error 400"
+          },
+          "404" : {
+            "description" : "Error 404"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Store" ],
+        "summary" : "Delete purchase order by ID",
+        "description" : "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
+        "operationId" : "deleteOrder",
+        "consumes" : [ ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "name" : "orderId",
+          "in" : "path",
+          "description" : "ID of the order that needs to be deleted",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Error 400"
+          },
+          "404" : {
+            "description" : "Error 404"
+          }
+        }
+      }
+    },
+    "/user" : {
+      "get" : {
+        "tags" : [ "User" ],
+        "summary" : "Get user list",
+        "description" : "获取博主列表",
+        "operationId" : "getUser",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "获取博主列表",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "User" ],
+        "summary" : "Create user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "createUser",
+        "consumes" : [ "application/json" ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/user/createWithArray" : {
+      "post" : {
+        "tags" : [ "User" ],
+        "summary" : "Creates list of users with given input array",
+        "operationId" : "createUsersWithArrayInput",
+        "consumes" : [ "application/json" ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/User"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/user/createWithList" : {
+      "post" : {
+        "tags" : [ "User" ],
+        "summary" : "Creates list of users with given list input",
+        "operationId" : "createUsersWithListInput",
+        "consumes" : [ "application/json" ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/User"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/user/{userlogin}" : {
+      "get" : {
+        "tags" : [ "User" ],
+        "summary" : "Get user by user name",
+        "operationId" : "getUserByName",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "userlogin",
+          "in" : "path",
+          "description" : "name that need to be deleted",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/User"
+            }
+          },
+          "400" : {
+            "description" : "Error 400"
+          },
+          "404" : {
+            "description" : "Error 404"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "User" ],
+        "summary" : "Updated user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "updateUser",
+        "consumes" : [ "application/json" ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "name" : "userlogin",
+          "in" : "path",
+          "description" : "name that need to be deleted",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Error 400"
+          },
+          "404" : {
+            "description" : "Error 404"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "User" ],
+        "summary" : "Delete user",
+        "description" : "This can only be done by the logged in user.",
+        "operationId" : "deleteUser",
+        "consumes" : [ ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "name" : "userlogin",
+          "in" : "path",
+          "description" : "name that need to be deleted",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Error 400"
+          },
+          "404" : {
+            "description" : "Error 404"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Blog" : {
+      "type" : "object",
+      "required" : [ "id", "name" ],
+      "properties" : {
+        "category" : {
+          "$ref" : "#/definitions/Category"
+        },
+        "content" : {
+          "type" : "string"
+        },
+        "id" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "unique identifier for the blog"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "photoUrls" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "blog status in the store"
+        },
+        "tags" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Tag"
+          }
+        }
+      }
+    },
+    "Category" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Order" : {
+      "type" : "object",
+      "properties" : {
+        "blogid" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "id" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "quantity" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "shipDate" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Order Status"
+        }
+      }
+    },
+    "Tag" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "User" : {
+      "type" : "object",
+      "properties" : {
+        "email" : {
+          "type" : "string"
+        },
+        "firstName" : {
+          "type" : "string"
+        },
+        "id" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "lastName" : {
+          "type" : "string"
+        },
+        "password" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string"
+        },
+        "userStatus" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "User Status"
+        },
+        "userlogin" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}
